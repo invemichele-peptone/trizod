@@ -69,3 +69,5 @@ Please note that each of these filters can be set individually with respective c
 
 ## Project status
 Under active development
+
+run with `python -m trizod.trizod`
