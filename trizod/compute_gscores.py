@@ -15,11 +15,11 @@ def compute_gscores(
     ionic_strength: float = 0.1,
 ) -> np.ndarray:
     """Compute g-scores from chemical shifts"""
-    #### default parameters ###
+    #### default parameters as 'unfiltered' ###
     offset_correction = True
-    max_offset = 3.0
-    reject_shift_type_only = False
-    ###########################
+    max_offset = np.inf
+    reject_shift_type_only = True
+    ###########################################
 
     shifts = []
     for (res, atom), val in cs.items():
@@ -28,10 +28,10 @@ def compute_gscores(
     ret = get_offset_corrected_wSCS(seq=sequence, shifts=shifts, predshiftdct=random_coil_cs)
     shw, ashwi, cmp_mask, olf, offf, shw0, ashwi0, ol0, off0 = ret
     offsets = offf
-    if offset_correction == False:
+    if not offset_correction:
         ashwi = ashwi0
         offsets = off0
-    elif not (max_offset == None or np.isinf(max_offset)):
+    elif not (max_offset is None or np.isinf(max_offset)):
         # check if any offsets are too large
         for i, at in enumerate(BBATNS):
             if np.abs(offf[at]) > max_offset:
